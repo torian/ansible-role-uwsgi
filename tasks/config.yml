@@ -1,0 +1,44 @@
+---
+
+- name: uWSGI Config dir
+  file:
+    state=directory
+    dest="{{uwsgi_config_dir}}"
+    owner="{{uwsgi_user}}"
+    group="{{uwsgi_group}}"
+    mode="0755"
+  
+- name: uWSGI Vassals dir
+  file:
+    state=directory
+    dest="{{uwsgi_vassals_dir}}"
+    owner="{{uwsgi_user}}"
+    group="{{uwsgi_group}}"
+    mode="0755"
+  when: uwsgi_vassals_enabled
+
+- name: uWSGI Sockets dir
+  file:
+    state=directory
+    dest="{{uwsgi_socket_dir}}"
+    owner="{{uwsgi_user}}"
+    group="{{uwsgi_group}}"
+    mode="0750"
+
+- name: uWSGI Log dir
+  file:
+    state=directory
+    dest="{{uwsgi_log_dir}}"
+    owner="{{uwsgi_user}}"
+    group="{{uwsgi_group}}"
+    mode="0755"
+
+- name: uWSGI configuration file
+  template:
+    src="etc/uwsgi/uwsgi.ini.j2"
+    dest="{{uwsgi_config_dir}}/uwsgi.ini"
+    owner="{{uwsgi_user}}"
+    group="{{uwsgi_group}}"
+    mode="0640"
+
+# vi:ts=2:sw=2:et:ft=yaml

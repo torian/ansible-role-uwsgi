@@ -1,0 +1,63 @@
+---
+
+uwsgi_prereqs:
+  - python-dev
+  - libpcre3
+  - libpcre3-dev
+  - libbz2-dev
+  - libcap2
+  - libcap-dev
+  - libssl1.0.0
+  - libssl-dev
+
+uwsgi_version: 2.0.11
+
+# Configuration directory for uWSGI
+#
+uwsgi_config_dir: /etc/uwsgi
+
+# Log prefix
+uwsgi_log_dir: /var/log/uwsgi
+
+# Logfile for the daemon
+uwsgi_logfile: "{{uwsgi_log_dir}}/uwsgi.log"
+
+# fifos / sockets directory
+uwsgi_socket_dir: /var/run/uwsgi
+
+# Master fifo
+uwsgi_master_fifo: "{{uwsgi_socket_dir}}/master.fifo"
+
+# uWSGI Vassals
+#  FIXME
+uwsgi_vassals_enabled: True
+uwsgi_vassals_dir:     /etc/uwsgi/vassals
+
+# uWSGI user
+#  If you want to create a specific user for running
+#  uWSGI, set uwsgi_crate_user to True. Otherwise,
+#  make sure that you define uwsgi_{user,group} to
+#  an already existing one
+uwsgi_create_user: True
+uwsgi_user:  uwsgi
+uwsgi_group: uwsgi
+
+# uWSGI daemon config
+#  You have a lot of freedom to specify the parameters and
+#  values that you need, as uwsgi_daemon_config is a dict
+#  The only parameters that are forced into the config
+#  file are (using uwsgi_daemon_config_defaults):
+#   - uid / gid
+#   - master-fifo
+#   - logto
+
+uwsgi_daemon_config_defaults:
+  uid: "{{uwsgi_user}}"
+  gid: "{{uwsgi_group}}"
+  logto: "{{uwsgi_logfile}}"
+  master-fifo: "{{uwsgi_master_fifo}}"
+
+# You can define additional params for the master here
+uwsgi_daemon_config: {}
+
+# vi:ts=2:sw=2:et:ft=yaml

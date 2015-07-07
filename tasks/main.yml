@@ -1,0 +1,13 @@
+---
+
+- include: install.yml
+  tags: uwsgi_install
+
+- include: user.yml
+  when: uwsgi_create_user
+  tags: uwsgi_user
+
+- include: config.yml
+  tags: uwsgi_config
+
+# vi:ts=2:sw=2:et:ft=yaml

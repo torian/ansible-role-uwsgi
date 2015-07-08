@@ -1,0 +1,10 @@
+# << Ansible managed file >>
+
+[uwsgi]
+
+{% for (k,v) in item.value.iteritems() %}
+{%   if k != 'enabled' %}
+{{k}} = {{v}}
+{%   endif %}
+{% endfor %}
+

@@ -11,11 +11,14 @@
 - name: uWSGI Vassals dir
   file:
     state=directory
-    dest="{{uwsgi_vassals_dir}}"
+    dest="{{item}}"
     owner="{{uwsgi_user}}"
     group="{{uwsgi_group}}"
     mode="0755"
   when: uwsgi_vassals_enabled
+  with_items:
+    - "{{uwsgi_vassals_available_dir}}"
+    - "{{uwsgi_vassals_enabled_dir}}"
 
 - name: uWSGI Sockets dir
   file:

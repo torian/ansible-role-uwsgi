@@ -17,21 +17,46 @@ uwsgi_version: 2.0.11
 uwsgi_config_dir: /etc/uwsgi
 
 # Log prefix
+#
 uwsgi_log_dir: /var/log/uwsgi
 
-# Logfile for the daemon
+# Logfile
+#
 uwsgi_logfile: "{{uwsgi_log_dir}}/uwsgi.log"
 
 # fifos / sockets directory
+#
 uwsgi_socket_dir: /var/run/uwsgi
 
 # Master fifo
+# 
 uwsgi_master_fifo: "{{uwsgi_socket_dir}}/master.fifo"
 
 # uWSGI Vassals
-#  FIXME
-uwsgi_vassals_enabled: True
-uwsgi_vassals_dir:     /etc/uwsgi/vassals
+#  If you enabled vassals, emperor mode will be enabled and
+#  the uwsgi_vassals_enabled_dir will be monitored.
+#  If you define any vassals in uwsgi_vassals, the
+#  configuration will be located at uwsgi_vassals_available_dir
+#  and if the enabled attr is true, a symlink will be generated
+uwsgi_vassals_enabled: False
+uwsgi_vassals_available_dir: /etc/uwsgi/apps-available
+uwsgi_vassals_enabled_dir:   /etc/uwsgi/apps-enabled
+
+#uwsgi_vassals:
+#  # This will generate an .ini file named myapp
+#  myapp:
+#    # The enabled attribute is the only one that is
+#    # not going to be reflected in the config
+#    enabled: True|False
+#    processes:    1
+#    listen:       64
+#    max-requests: 512
+#    base_dir: /opt/%n
+#    chdir:    %(base_dir)
+#    env:      %(base_dir)/venv
+#    module:   'wsgi:app'
+#
+uwsgi_vassals: {}
 
 # uWSGI user
 #  If you want to create a specific user for running
@@ -49,12 +74,12 @@ uwsgi_group: uwsgi
 #  file are (using uwsgi_daemon_config_defaults):
 #   - uid / gid
 #   - master-fifo
-#   - logto
+#   - daemonize
 
 uwsgi_daemon_config_defaults:
   uid: "{{uwsgi_user}}"
   gid: "{{uwsgi_group}}"
-  logto: "{{uwsgi_logfile}}"
+  daemonize: "{{uwsgi_logfile}}"
   master-fifo: "{{uwsgi_master_fifo}}"
 
 # You can define additional params for the master here

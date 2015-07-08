@@ -10,4 +10,8 @@
 - include: config.yml
   tags: uwsgi_config
 
+- include: vassals.yml
+  when: uwsgi_vassals
+  tags: uwsgi_vassals
+
 # vi:ts=2:sw=2:et:ft=yaml

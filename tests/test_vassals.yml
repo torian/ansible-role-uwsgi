@@ -1,6 +1,6 @@
 ---
-- hosts: all
-  sudo: yes
+- hosts: localhost
+  remote_user: root
 
   roles:
     - { 
@@ -9,13 +9,12 @@
         uwsgi_vassals: {
           test_enabled: {
             enabled: True,
+            http-socket: ':5000',
             processes: 1,
             listen: 64,
             wsgi-file: /vagrant/tests/wsgi/test.py
           },
           test_disabled: {
-            processes: 1,
-            listen: 64,
             wsgi-file: /vagrant/tests/wsgi/disabled.py
           }
         }

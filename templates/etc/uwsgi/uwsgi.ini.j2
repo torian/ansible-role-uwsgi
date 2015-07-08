@@ -7,6 +7,10 @@
 {%   endfor %}
 {% endif%}
 
+{% if uwsgi_vassals_enabled %}
+emperor = {{uwsgi_vassals_enabled_dir}}
+{% endif %}
+
 {% if uwsgi_daemon_config is defined %}
 {%   for (k,v) in uwsgi_daemon_config.iteritems() %}
 {{k}} = {{v}}

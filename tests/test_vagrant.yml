@@ -2,23 +2,21 @@
 - hosts: all
   sudo: yes
 
+  vars:
+    - uwsgi_vassals_enabled: True
+    - uwsgi_vassals:
+        test_enabled: 
+          enabled: True
+          processes: 1
+          listen: 64
+          wsgi-file: /vagrant/tests/wsgi/test.py
+        
+        test_disabled:
+          processes: 1,
+          listen: 64,
+          wsgi-file: /vagrant/tests/wsgi/disabled.py
+  
   roles:
-    - { 
-        role: ansible-role-uwsgi,
-        uwsgi_vassals_enabled: True,
-        uwsgi_vassals: {
-          test_enabled: {
-            enabled: True,
-            processes: 1,
-            listen: 64,
-            wsgi-file: /vagrant/tests/wsgi/test.py
-          },
-          test_disabled: {
-            processes: 1,
-            listen: 64,
-            wsgi-file: /vagrant/tests/wsgi/disabled.py
-          }
-        }
-      }
+    - { role: ansible-role-uwsgi }
 
 # vi:ts=2:sw=2:et:ft=yaml

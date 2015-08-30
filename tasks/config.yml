@@ -28,6 +28,14 @@
     group="{{uwsgi_group}}"
     mode="0750"
 
+# Debian like distros mount /var/run as tmpfs
+- name: uWSGI Socker dir persistence
+  lineinfile:
+    state=present
+    dest="/etc/rc.local"
+    line="[ ! -d '{{uwsgi_socket_dir}}' ] && mkdir -p {{uwsgi_socket_dir}} && chown {{uwsgi_user}}:{{uwsgi_group}} {{uwsgi_socket_dir}}"
+    insertbefore="exit 0"
+
 - name: uWSGI Log dir
   file:
     state=directory

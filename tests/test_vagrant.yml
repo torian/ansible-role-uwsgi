@@ -1,12 +1,12 @@
 ---
 - hosts: all
-  sudo: yes
+  become: yes
 
   vars:
     - uwsgi_vassals_enabled: True
     - uwsgi_vassals:
         test_enabled: 
-          enabled: True
+          enabled: true
           processes: 1
           listen: 64
           wsgi-file: /vagrant/tests/wsgi/test.py

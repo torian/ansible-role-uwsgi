@@ -1,9 +1,10 @@
 VAGRANTFILE_API_VERSION = '2'
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+ANSIBLE_VERSION = '2.3.0.0'
 
-  config.vm.box      = 'ubuntu/trusty64'
-  config.vm.hostname = 'uwsgi'
+ANSIBLE_ROLE = 'ansible-role-uwsgi'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :virtualbox do |vb|
     vb.gui = false
@@ -12,14 +13,75 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize [ 'modifyvm', :id, '--natdnshostresolver1', 'on' ]
     vb.customize [ 'modifyvm', :id, '--natdnsproxy1', 'on' ]
   end
-      
-  config.vm.provision 'shell', inline: 'apt-get update'
-  config.vm.provision 'shell', inline: 'apt-get install -y -qq  python-pip'
-  config.vm.provision 'shell', inline: 'pip install ansible jinja2'
-  config.vm.provision 'shell', inline: 'ln -sf /vagrant /ansible-role-uwsgi'
+  
+  config.vm.define 'ubuntu-xenial' do |ubuntu_x|
+    ubuntu_x.vm.box      = 'ubuntu/xenial64'
+    #ubuntu_x.vm.hostname = 'ubuntu-xenial'
+    
+    ubuntu_x.vm.provision 'shell', inline: 'apt-get update'
+    ubuntu_x.vm.provision 'shell', inline: 'apt-get install -y -qq  python-pip libffi-dev libssl-dev python-dev'
+    ubuntu_x.vm.provision 'shell', inline: "pip install -q ansible==#{ANSIBLE_VERSION} jinja2"
 
-  config.vm.provision 'ansible' do |ansible| 
-    ansible.playbook = 'tests/test_vagrant.yml'
+    ubuntu_x.vm.provision 'ansible_local' do |ansible| 
+      ansible.playbook = 'tests/test_vagrant.yml'
+    end
+    
+  end
+
+  config.vm.define 'ubuntu-trusty' do |ubuntu_t|
+    ubuntu_t.vm.box      = 'ubuntu/trusty64'
+    ubuntu_t.vm.hostname = 'ubuntu-trusty'
+    
+    ubuntu_t.vm.provision 'shell', inline: 'apt-get update'
+    ubuntu_t.vm.provision 'shell', inline: 'apt-get install -y -qq  python-pip libffi-dev libssl-dev python-dev'
+    ubuntu_t.vm.provision 'shell', inline: "pip install -q ansible==#{ANSIBLE_VERSION} jinja2"
+
+    ubuntu_t.vm.provision 'ansible_local' do |ansible| 
+      ansible.playbook = 'tests/test_vagrant.yml'
+    end
+    
+  end
+
+  config.vm.define 'centos-7' do |centos7|
+    centos7.vm.box      = 'centos/7'
+    #centos7.vm.hostname = 'centos-7'
+
+    centos7.vm.provision 'shell', inline: 'yum install -y ca-certificates'
+    centos7.vm.provision 'shell', inline: "echo \"#{EPEL_REPO_7}\" > /etc/yum.repos.d/epel.repo"
+    centos7.vm.provision 'shell', inline: 'yum install -y python-pip python-devel gcc libffi-devel openssl-devel'
+    centos7.vm.provision 'shell', inline: 'pip install -q pip --upgrade'
+    centos7.vm.provision 'shell', inline: "pip install -q ansible==#{ANSIBLE_VERSION} jinja2"
+    centos7.vm.provision 'shell', inline: "ln -sf /vagrant /vagrant/#{ANSIBLE_ROLE}"
+
+    centos7.vm.provision 'ansible_local' do |ansible| 
+      ansible.version      = "#{ANSIBLE_VERSION}"
+      ansible.install_mode = 'pip'
+      ansible.config_file  = '/vagrant/ansible.cfg'
+      ansible.playbook     = 'tests/test_vagrant.yml'
+      ansible.extra_vars = {
+      }
+    end
+  end
+
+  config.vm.define 'centos-6' do |centos6|
+    centos6.vm.box      = "puppetlabs/centos-6.6-64-nocm"
+    centos6.vm.hostname = 'centos-6'
+
+    centos6.vm.provision 'shell', inline: 'yum install -y ca-certificates'
+    centos6.vm.provision 'shell', inline: "echo \"#{EPEL_REPO_6}\" > /etc/yum.repos.d/epel.repo"
+    centos6.vm.provision 'shell', inline: 'yum install -y python-pip python-devel gcc libffi-devel openssl-devel'
+    centos6.vm.provision 'shell', inline: 'pip install -q pip --upgrade'
+    centos6.vm.provision 'shell', inline: "pip install -q ansible==#{ANSIBLE_VERSION} jinja2"
+    centos6.vm.provision 'shell', inline: "ln -sf /vagrant /vagrant/#{ANSIBLE_ROLE}"
+
+    centos6.vm.provision 'ansible_local' do |ansible| 
+      ansible.version      = "#{ANSIBLE_VERSION}"
+      ansible.install_mode = 'pip'
+      ansible.config_file  = '/vagrant/ansible.cfg'
+      ansible.playbook     = 'tests/test_vagrant.yml'
+      ansible.extra_vars = {
+      }
+    end
   end
 
 end

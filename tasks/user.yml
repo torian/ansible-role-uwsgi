@@ -2,10 +2,10 @@
 
 - name: uWSGI user
   user:
-    state="present"
-    name="{{uwsgi_user}}"
-    shell="/bin/false"
-    system=yes
-    createhome=no
+    state: "present"
+    name: "{{uwsgi_user}}"
+    shell: "/bin/false"
+    system: yes
+    createhome: no
 
 # vi:ts=2:sw=2:et:ft=yaml

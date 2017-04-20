@@ -2,21 +2,21 @@
 
 - name: uWSGI vassals config
   template:
-    src="etc/uwsgi/vassals.ini.j2"
-    dest="{{uwsgi_vassals_available_dir}}/{{item.key}}.ini"
-    owner="{{uwsgi_user}}"
-    group="{{uwsgi_group}}"
-    mode="0640"
-  with_dict: uwsgi_vassals
+    src: "etc/uwsgi/vassals.ini.j2"
+    dest: "{{uwsgi_vassals_available_dir}}/{{item.key}}.ini"
+    owner: "{{uwsgi_user}}"
+    group: "{{uwsgi_group}}"
+    mode: "0640"
+  with_dict: "{{uwsgi_vassals}}"
 
 - name: uWSGI Enable vassals config
   file:
-    state=link
-    src="{{uwsgi_vassals_available_dir}}/{{item.key}}.ini"
-    dest="{{uwsgi_vassals_enabled_dir}}/{{item.key}}.ini"
-    owner="{{uwsgi_user}}"
-    group="{{uwsgi_group}}"
-  when: item.value.enabled is defined and item.value.enabled
-  with_dict: uwsgi_vassals
+    state: link
+    src: "{{uwsgi_vassals_available_dir}}/{{item.key}}.ini"
+    dest: "{{uwsgi_vassals_enabled_dir}}/{{item.key}}.ini"
+    owner: "{{uwsgi_user}}"
+    group: "{{uwsgi_group}}"
+  when: (item.value.enabled is defined) and (item.value.enabled)
+  with_dict: "{{uwsgi_vassals}}"
 
 # vi:ts=2:sw=2:et:ft=yaml

@@ -2,19 +2,19 @@
 
 - name: uWSGI Config dir
   file:
-    state=directory
-    dest="{{uwsgi_config_dir}}"
-    owner="{{uwsgi_user}}"
-    group="{{uwsgi_group}}"
-    mode="0755"
+    state: directory
+    dest: "{{uwsgi_config_dir}}"
+    owner: "{{uwsgi_user}}"
+    group: "{{uwsgi_group}}"
+    mode: "0755"
   
 - name: uWSGI Vassals dir
   file:
-    state=directory
-    dest="{{item}}"
-    owner="{{uwsgi_user}}"
-    group="{{uwsgi_group}}"
-    mode="0755"
+    state: directory
+    dest: "{{item}}"
+    owner: "{{uwsgi_user}}"
+    group: "{{uwsgi_group}}"
+    mode: "0755"
   when: uwsgi_vassals_enabled
   with_items:
     - "{{uwsgi_vassals_available_dir}}"
@@ -22,34 +22,34 @@
 
 - name: uWSGI Sockets dir
   file:
-    state=directory
-    dest="{{uwsgi_socket_dir}}"
-    owner="{{uwsgi_user}}"
-    group="{{uwsgi_group}}"
-    mode="0750"
+    state: directory
+    dest: "{{uwsgi_socket_dir}}"
+    owner: "{{uwsgi_user}}"
+    group: "{{uwsgi_group}}"
+    mode: "0750"
 
 # Debian like distros mount /var/run as tmpfs
 - name: uWSGI Socker dir persistence
   lineinfile:
-    state=present
-    dest="/etc/rc.local"
-    line="[ ! -d '{{uwsgi_socket_dir}}' ] && mkdir -p {{uwsgi_socket_dir}} && chown {{uwsgi_user}}:{{uwsgi_group}} {{uwsgi_socket_dir}}"
-    insertbefore="exit 0"
+    state: present
+    dest: "/etc/rc.local"
+    line: "[ ! -d '{{uwsgi_socket_dir}}' ] && mkdir -p {{uwsgi_socket_dir}} && chown {{uwsgi_user}}:{{uwsgi_group}} {{uwsgi_socket_dir}}"
+    insertbefore: "exit 0"
 
 - name: uWSGI Log dir
   file:
-    state=directory
-    dest="{{uwsgi_log_dir}}"
-    owner="{{uwsgi_user}}"
-    group="{{uwsgi_group}}"
-    mode="0755"
+    state: directory
+    dest: "{{uwsgi_log_dir}}"
+    owner: "{{uwsgi_user}}"
+    group: "{{uwsgi_group}}"
+    mode: "0755"
 
 - name: uWSGI configuration file
   template:
-    src="etc/uwsgi/uwsgi.ini.j2"
-    dest="{{uwsgi_config_dir}}/uwsgi.ini"
-    owner="{{uwsgi_user}}"
-    group="{{uwsgi_group}}"
-    mode="0640"
+    src: "etc/uwsgi/uwsgi.ini.j2"
+    dest: "{{uwsgi_config_dir}}/uwsgi.ini"
+    owner: "{{uwsgi_user}}"
+    group: "{{uwsgi_group}}"
+    mode: "0640"
 
 # vi:ts=2:sw=2:et:ft=yaml

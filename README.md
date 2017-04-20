@@ -6,7 +6,7 @@ This role will install [uWSGI](https://uwsgi-docs.readthedocs.org/en/latest/).
 
 ## Tested on
 
-  * Ubuntu trusty
+  * Ubuntu (Xenial / Trusty)
 
 ## Defaults
 

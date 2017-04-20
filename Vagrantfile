@@ -35,6 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ubuntu_t.vm.provision 'shell', inline: 'apt-get update'
     ubuntu_t.vm.provision 'shell', inline: 'apt-get install -y -qq  python-pip libffi-dev libssl-dev python-dev'
     ubuntu_t.vm.provision 'shell', inline: "pip install -q ansible==#{ANSIBLE_VERSION} jinja2"
+    ubuntu_t.vm.provision 'shell', inline: "ln -sf /vagrant /vagrant/#{ANSIBLE_ROLE}"
 
     ubuntu_t.vm.provision 'ansible_local' do |ansible| 
       ansible.playbook = 'tests/test_vagrant.yml'

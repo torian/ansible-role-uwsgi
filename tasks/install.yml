@@ -3,8 +3,7 @@
 - name: Install uWSGI Prerequisites
   package:
     state: present
-    name: "{{item}}"
-  with_items: "{{uwsgi_prereqs}}"
+    name: "{{uwsgi_prereqs}}"
 
 - name: Install uWSGI
   pip:

@@ -16,7 +16,8 @@ uwsgi_logfile: "{{uwsgi_log_dir}}/uwsgi.log"
 
 # fifos / sockets directory
 #
-uwsgi_socket_dir: /var/run/uwsgi
+uwsgi_runtime_dir: /run/uwsgi
+uwsgi_socket_dir:  "{{uwsgi_runtime_dir}}"
 
 # Master fifo
 # 
@@ -74,5 +75,18 @@ uwsgi_daemon_config_defaults:
 
 # You can define additional params for the master here
 uwsgi_daemon_config: {}
+
+uwsgi_systemd_unit_file: /etc/systemd/system/uwsgi.service
+uwsgi_systemd_unit_directives:
+  Unit:
+    Description: uWSGI Runtime Directory
+  Service:
+    Type: oneshot
+    ExecStart: /bin/true
+    User: "{{uwsgi_user}}"
+    Group: "{{uwsgi_group}}"
+    RuntimeDirectory: "{{uwsgi_runtime_dir|basename}}"
+    RemainAfterExit: yes
+  
 
 # vi:ts=2:sw=2:et:ft=yaml

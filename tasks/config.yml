@@ -20,22 +20,6 @@
     - "{{uwsgi_vassals_available_dir}}"
     - "{{uwsgi_vassals_enabled_dir}}"
 
-- name: uWSGI Sockets dir
-  file:
-    state: directory
-    dest: "{{uwsgi_socket_dir}}"
-    owner: "{{uwsgi_user}}"
-    group: "{{uwsgi_group}}"
-    mode: "0750"
-
-# Debian like distros mount /var/run as tmpfs
-- name: uWSGI Socker dir persistence
-  lineinfile:
-    state: present
-    dest: "/etc/rc.local"
-    line: "[ ! -d '{{uwsgi_socket_dir}}' ] && mkdir -p {{uwsgi_socket_dir}} && chown {{uwsgi_user}}:{{uwsgi_group}} {{uwsgi_socket_dir}}"
-    insertbefore: "exit 0"
-
 - name: uWSGI Log dir
   file:
     state: directory
@@ -51,5 +35,24 @@
     owner: "{{uwsgi_user}}"
     group: "{{uwsgi_group}}"
     mode: "0640"
+
+- name: SystemD Unit File
+  template:
+    src: etc/systemd/system/uwsgi.service.j2
+    dest: "{{uwsgi_systemd_unit_file}}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: uwsgi_systemd_unit_updated
+  when: ansible_service_mgr == "systemd"
+
+- name: SystemD Reload
+  systemd:
+    name: uwsgi.service
+    daemon_reload: yes
+    enabled: yes
+  when: 
+    - ansible_service_mgr == "systemd"
+    - uwsgi_systemd_unit_updated is succeeded
 
 # vi:ts=2:sw=2:et:ft=yaml

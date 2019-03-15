@@ -1,0 +1,7 @@
+{% for k,attrs in uwsgi_systemd_unit_directives.items() %}
+[{{k}}]
+{% for attr,value in attrs.items() %}
+{{attr}}={{value}}
+{% endfor %}
+
+{% endfor %}

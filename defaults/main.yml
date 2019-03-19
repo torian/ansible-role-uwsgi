@@ -87,6 +87,7 @@ uwsgi_systemd_unit_directives:
     Group: "{{uwsgi_group}}"
     RuntimeDirectory: "{{uwsgi_runtime_dir|basename}}"
     RemainAfterExit: yes
-  
+  Install:
+    WantedBy: multi-user.target
 
 # vi:ts=2:sw=2:et:ft=yaml

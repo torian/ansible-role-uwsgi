@@ -10,5 +10,6 @@
     state: present
     name: uwsgi
     version: "{{uwsgi_version|default('')}}"
+    executable: "{{uwsgi_pip_executable}}"
 
 # vi:ts=2:sw=2:et:ft=yaml

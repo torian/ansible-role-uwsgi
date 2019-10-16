@@ -1,7 +1,7 @@
 ---
 
 uwsgi_prereqs:
-  - python-dev
+  - python3-dev
   - libpcre3
   - libpcre3-dev
   - libbz2-dev

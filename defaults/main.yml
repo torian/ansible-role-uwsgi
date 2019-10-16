@@ -1,6 +1,9 @@
 ---
 
-uwsgi_version: 2.0.15
+uwsgi_version: 2.0.18
+
+# Control which pip version is used to install uWSGI
+uwsgi_pip_executable: pip
 
 # Configuration directory for uWSGI
 #

@@ -10,7 +10,7 @@ This role will install [uWSGI](https://uwsgi-docs.readthedocs.org/en/latest/).
 
 ## Defaults
 
-  * `uwsgi_version`: 2.0.15
+  * `uwsgi_version`: 2.0.18
   * `uwsgi_user`: uwsgi
   * `uwsgi_group`: uwsgi
   * `uwsgi_logfile`: /var/log/uwsgi/uwsgi.log
